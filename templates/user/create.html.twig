@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme formArticle 'bootstrap_4_layout.html.twig' %}
+
+{% block body %}
+
+    <h1>Création d'un utilisateur</h1>
+
+    {{ form_start(formUser) }}
+
+    {{ form_row(formUser.firstname) }}
+
+    {{ form_row(formUser.lastname) }}
+
+    {{ form_row(formUser.email) }}
+
+    {#{{ form_row(formArticle.image, {'attr':{'placeholder': "URL de Image"} }) }}#}
+
+    {{ form_row(formUser.roles) }}
+    {{ form_row(formUser.active) }}
+
+
+    {{ form_end(formUser) }}
+
+    <button type="submit" class="btn btn-danger">
+        {% if editMode %}
+            mettre à jour l'article
+        {% else %}
+            Ajouter l'article
+        {% endif %}
+    </button>
+
+
+{% endblock %}

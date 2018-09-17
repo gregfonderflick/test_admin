@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello!{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+
+
+        <div class="row">
+
+            <div class="col-md-5 offset-md-11">
+                <a href="{{ path('article_create') }}" class="btn btn-success">Ajouter un article</a>
+
+            </div>
+        </div>
+
+
+
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">ARTICLES</th>
+
+        </tr>
+
+
+        <thead class="thead-dark">
+
+
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">TITRE</th>
+            <th scope="col">RUBRIQUE</th>
+            <th scope="col">DATE DE CREATION</th>
+            <th scope="col">DATE DE MODIFICATION</th>
+            <th scope="col">ACTION</th>
+        </tr>
+        </thead>
+        {% for article in article %}
+        <tbody>
+        <tr>
+            <th scope="row">{{ article.id }}</th>
+            <td>{{ article.title }}</td>
+            <td>{{ article.heading }}</td>
+            <td>{{ article.createdAt | date('d/m/Y') }}</td>
+            <td>{{ article.updatedAt| date('d/m/Y') }}</td>
+            <td>
+                <a href="{{ path('article_edit', {'id':article.id}) }}" class="btn btn-success">modifier</a>
+                <a href="{{ path('article_delete', {'id':article.id}) }}" class="btn btn-danger">supprimer</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+    <div class="container">
+
+
+    <div class="row">
+
+        <div class="col-md-5 offset-md-11">
+            <a href="{{ path('article_create') }}" class="btn btn-success">Ajouter une rubrique</a>
+
+        </div>
+    </div>
+
+        {% if is_granted('ROLE_ADMIN') %}
+
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">RUBRIQUES</th>
+        </tr>
+
+        <thead class="thead-dark">
+
+
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">TITRE</th>
+            <th scope="col">ACTION</th>
+        </tr>
+        </thead>
+        {% for heading in heading %}
+        <tbody>
+        <tr>
+            <th scope="row">{{ heading.id }}</th>
+            <td>{{ heading.title }}</td>
+            <td>
+                <a href="{{ path('heading_edit', {'id':heading.id}) }}" class="btn btn-success">modifier</a>
+                <a href="{{ path('heading_delete', {'id':heading.id}) }}" class="btn btn-danger">supprimer</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    </div>
+
+        {% endif %}
+
+
+{% endblock %}
