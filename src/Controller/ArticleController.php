@@ -35,18 +35,28 @@ class ArticleController extends AbstractController
             $article->setCreatedAt(new \DateTime());
         } /*else {
             $article->setUpdatedAt(new \DateTime());
-        }*/else {
-            $lastFileName = $article->getImage();
-        }
+        }*/
+
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // $file stores the uploaded PDF file
+            $lastFileName = $article->getImage();
 
             $article = $form->getData();
             // $file stores the uploaded PDF file
             $file = $form->get('file')->getData();
+
+            if ($file === null){
+                $article->setImage($lastFileName);
+
+            }
+            else {
+            if (file_exists($this->getParameter('images_directory').'/'.$lastFileName)) {
+
+                unlink($this->getParameter('images_directory').'/'.$lastFileName);
+            }
 
             $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
 
@@ -55,10 +65,7 @@ class ArticleController extends AbstractController
                 $this->getParameter('images_directory'),
                 $fileName
             );
-            if (file_exists($this->getParameter('images_directory').'/'.$lastFileName)) {
 
-                unlink($this->getParameter('images_directory').'/'.$lastFileName);
-            }
 
             // updates the 'brochure' property to store the PDF file name
             // instead of its contents
@@ -67,7 +74,6 @@ class ArticleController extends AbstractController
             // ... persist the $product variable or any other work
 
 
-            $manager = $this->getDoctrine()->getManager();
 
             // ... persist the $product variable or any other work
             $manager->persist($article);
@@ -75,7 +81,7 @@ class ArticleController extends AbstractController
 
             return $this->redirect($this->generateUrl('article_show'));
 
-        }
+        }}
 
         return $this->render('article/create.html.twig', [
             'formArticle' => $form->createView(),
